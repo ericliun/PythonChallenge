@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+​
+{% block title %}个人资料 - {{ user.username }}{% endblock %}
+​
+{% block content %}
+    <div class="container">
+        <img class="img-rounded profile-thumbnail" src="{{ url_for('static',filename='code200.png') }}">
+        <button class="btn btn-primary" type="button">
+          个人荣誉 <span class="badge">4</span>
+        </button>
+
+        <hr>
+
+        <ul class="list-group">
+
+            {% if user.username %}
+                <li class="list-group-item">用户名：<b>{{ user.username }}</b></li>
+                <br>
+            {% if user.email %}
+                    <li class="list-group-item">邮箱：<b>{{ user.email }}</b></li>
+            {% else %}
+                    <li class="list-group-item">邮箱:<b style="color:red;">未填写</b></li>
+            {% endif %}
+                <br>
+            {% if user.address %}
+                    <li class="list-group-item"> 地址：
+                        <b>
+                            <a href="http://map.baidu.com/?newmap=1&ie=utf-8&s=s%26wd%3D{{ user.address }}"
+                               target="_blank">{{ user.address }}</a>
+                        </b></li>
+
+            {% else %}
+                    <li class="list-group-item">地址:<b style="color:red;">未填写</b></li>
+
+            {% endif %}
+                <br>
+            {% if user.info %}
+                    <li class="list-group-item">个人介绍：<b>{{ user.info }}</b></li>
+
+            {% else %}
+                    <li class="list-group-item">个人介绍:<b style="color:red;">未填写</b></li>
+
+            {% endif %}
+
+            {% endif %}
+            <p><br>
+                {% if um.id == user.id %}
+                    <a class="btn btn-default" href="{{ url_for('edit_info',user_id=user.id) }}">编辑个人信息</a>
+                {% endif %}
+            </p>
+        </ul>
+        {#<ul class="posts">#}
+        {#    <!--遍历查询用户的所有文章-->#}
+        {#    {% for article in articles %}#}
+        {#    <li class="post">#}
+        {#        <div class="post-thumbnail">#}
+        {#            <img style="width:40px;height:40px;" src="{{ url_for('static',filename='code200.png') }}" alt="" class="avatar">#}
+        {#        </div>#}
+        {#        <div class="post-content">#}
+        {#            <div class="post-body">#}
+        {#                <p style="color:blue">#}
+        {#                    <b>#}
+        {#                        <a href="{{ url_for('detail',article_id=article.id) }}">{{ article.title }}</a>#}
+        {#                    </b>#}
+        {#                </p>#}
+        {#                <p><span >{{ article.content }}</span></p>#}
+        {#            </div>#}
+        {#        </div>#}
+        {#        <div class="post-footer">#}
+        {#            <span class="label label-primary">作者：{{ article.author.username }}</span>#}
+        {#            <span class="label label-primary">时间：{{ article.create_time }}</span>#}
+        {#        </div>#}
+        {#    </li>#}
+        {#    {% endfor %}#}
+        {#</ul>#}
+    </div>
+{% endblock %}
