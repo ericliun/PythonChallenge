@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container">
+        <div class="jumbotron">
+            <img src="{{ url_for("static",filename=photo) }}">
+        </div>
+    </div>
+{% endblock %}

@@ -4,11 +4,16 @@
 ​
 {% block content %}
     <div class="container">
-        <img class="img-rounded profile-thumbnail" src="{{ url_for('static',filename='code200.png') }}">
-        <button class="btn btn-primary" type="button">
-          个人荣誉 <span class="badge">4</span>
-        </button>
-
+        {% if um.real_avatar %}
+            <img style="width:200px;height:200px;" class="img-rounded profile-thumbnail" src="{{ user.real_avatar }}">
+        {% else %}
+            <img class="img-rounded profile-thumbnail" src="{{ url_for('static',filename='code200.png') }}">
+        {% endif %}
+        {#    <br>#}
+        {#    <br>#}
+        {#        <button class="btn btn-primary" type="button">#}
+        {#            个人荣誉 <span class="badge">4</span>#}
+        {#        </button>#}
         <hr>
 
         <ul class="list-group">
@@ -16,31 +21,31 @@
             {% if user.username %}
                 <li class="list-group-item">用户名：<b>{{ user.username }}</b></li>
                 <br>
-            {% if user.email %}
+                {% if user.email %}
                     <li class="list-group-item">邮箱：<b>{{ user.email }}</b></li>
-            {% else %}
+                {% else %}
                     <li class="list-group-item">邮箱:<b style="color:red;">未填写</b></li>
-            {% endif %}
+                {% endif %}
                 <br>
-            {% if user.address %}
+                {% if user.address %}
                     <li class="list-group-item"> 地址：
                         <b>
                             <a href="http://map.baidu.com/?newmap=1&ie=utf-8&s=s%26wd%3D{{ user.address }}"
                                target="_blank">{{ user.address }}</a>
                         </b></li>
 
-            {% else %}
+                {% else %}
                     <li class="list-group-item">地址:<b style="color:red;">未填写</b></li>
 
-            {% endif %}
+                {% endif %}
                 <br>
-            {% if user.info %}
+                {% if user.info %}
                     <li class="list-group-item">个人介绍：<b>{{ user.info }}</b></li>
 
-            {% else %}
+                {% else %}
                     <li class="list-group-item">个人介绍:<b style="color:red;">未填写</b></li>
 
-            {% endif %}
+                {% endif %}
 
             {% endif %}
             <p><br>
@@ -53,26 +58,33 @@
         <ul class="posts">
             <!--遍历查询用户的所有文章-->
             {% for post in posts %}
-            <li class="post">
-                <div class="post-thumbnail">
-                    <img style="width:40px;height:40px;" src="{{ url_for('static',filename='code200.png') }}" alt="" class="avatar">
-                </div>
-                <div class="post-content">
-                    <div class="post-body">
-                        <p style="color:blue">
-                            <b>
-                                <a href="{{ url_for('detail',post_id=post.id) }}">{{ post.title }}</a>
-                            </b>
-                        </p>
-                        <p><span >{{ post.content }}</span></p>
-                    </div>
-                </div>
-                <div class="post-footer">
-                    <span class="label label-primary">作者：{{ post.author.username }}</span>
-                    <span class="label label-primary">时间：{{ post.create_time }}</span>
-                </div>
-            </li>
+                {% if um.id == post.id %}
+
+                    <li class="post">
+                        <div class="post-thumbnail">
+                            <img style="width:40px;height:40px;" src="{{ url_for('static',filename='code200.png') }}"
+                                 alt=""
+                                 class="avatar">
+                        </div>
+                        <div class="post-content">
+                            <div class="post-body">
+                                <p style="color:blue">
+                                    <b>
+                                        <a href="{{ url_for('detail',post_id=post.id) }}">{{ post.title }}</a>
+                                    </b>
+                                </p>
+                                <p><span>{{ post.content }}</span></p>
+                            </div>
+                        </div>
+                        <div class="post-footer">
+                            <span class="label label-primary">作者：{{ post.author.username }}</span>
+                            <span class="label label-primary">时间：{{ post.create_time }}</span>
+                        </div>
+                    </li>
+                {% endif %}
             {% endfor %}
+
+
         </ul>
     </div>
 {% endblock %}

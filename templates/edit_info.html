@@ -3,13 +3,13 @@
 {% block title %}编辑个人基本信息{% endblock %}
 ​
 {% block content %}
-<div class="container">
-    <h1>编辑个人基本信息</h1>
-</div>
+    <div class="container">
+        <h1>编辑个人基本信息</h1>
+    </div>
     <hr>
-  <div class="container">
-<div class="col-md-4">
-    {{ wtf.quick_form(form) }}
-</div>
-</div>
+    <div class="container">
+        <div class="col-md-4">
+            {{ wtf.quick_form(form) }}
+        </div>
+    </div>
 {% endblock %}
