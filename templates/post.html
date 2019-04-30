@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block title %}发布主题{% endblock %}
+​
+{% block content %}
+    <div class="container">
+        <h1>创作新主题</h1>
+    </div>
+    <hr>
+    <div class="container">
+        <div class="col-md-4">
+            {{ wtf.quick_form(form) }}
+        </div>
+    </div>
+{% endblock %}
