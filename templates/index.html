@@ -1,17 +1,20 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div class="container">
-        <div class="jumbotron">
-            <h1>PythonChallenge</h1>
-            <p>人生苦短,我用Python!</p>
-            <p>这是一个关于Python竞赛的网站,欢迎大家前来挑战!</p>
-            {% if um %}
-                <p><a class="btn btn-primary btn-lg" href="{{ url_for('challenge', answer=um.stage) }}" role="button">点击开始挑战</a>
-                </p>
-            {% else %}
-                <p><a class="btn btn-primary btn-lg" href="{{ url_for('login') }}" role="button">点击开始挑战</a></p>
-            {% endif %}
+
+    <main class="bs-docs-masthead" id="content" tabindex="-1">
+        <div class="container">
+            <span class="bs-docs-booticon bs-docs-booticon-lg bs-docs-booticon-outline">P</span>
+            <p class="lead">人生苦短,我用Python!</p>
+            <p class="lead">如果你是一位勇敢的Pythoner，那就不要犹豫，进来挑战Python吧，不断失败，不断学习，不断进步，挑战就是新生。</p>
+            <p class="lead">
+                {% if um %}
+                <a href="{{ url_for('challenge', answer=um.stage) }}" class="btn btn-outline-inverse btn-lg">开始挑战</a>
+                {% else %}
+                <a href="{{ url_for('login') }}" class="btn btn-outline-inverse btn-lg">开始挑战</a>
+                {% endif %}
+            </p>
+            <p class="version">当前版本： v0.0.1 | 关卡更新于：2019-05-05</p>
         </div>
-    </div>
+    </main>
 {% endblock %}

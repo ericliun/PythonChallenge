@@ -3,10 +3,14 @@
 {% block title %}编辑个人基本信息{% endblock %}
 ​
 {% block content %}
-    <div class="container">
-        <h1>编辑个人基本信息</h1>
+    <div class="bs-docs-header" id="content" tabindex="-1">
+      <div class="container">
+        <h1>编辑个人信息</h1>
+        <p>我们会对您的个人信息保密,请放心填写.</p>
+
+      </div>
     </div>
-    <hr>
+
     <div class="container">
         <div class="col-md-4">
             {{ wtf.quick_form(form) }}

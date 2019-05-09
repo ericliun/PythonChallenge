@@ -7,9 +7,9 @@ verify_ssl = true
 
 [packages]
 flask = "*"
-flask-bootstrap = "*"
 flask-wtf = "*"
 flask-sqlalchemy = "*"
+flask-bootstrap = "*"
 
 [requires]
 python_version = "3.6"

@@ -1,7 +1,7 @@
 import os
 from datetime import datetime
 
-from flask import Flask, render_template, request, redirect, url_for, flash, session, current_app, send_from_directory
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
 from werkzeug.utils import secure_filename
@@ -10,8 +10,6 @@ from wtforms.validators import DataRequired
 from flask_sqlalchemy import SQLAlchemy
 
 basedir = os.path.abspath(os.path.dirname(__file__))
-# UPLOAD_FOLDER = os.path.join(basedir, '/static/avatar')
-
 app = Flask(__name__)
 
 Bootstrap(app)
@@ -20,7 +18,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + \
                                         os.path.join(basedir, 'database.sqlite')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# UPLOAD_FOLDER = current_app.config['UPLOAD_FOLDER']
 
 app.secret_key = 'codepku'
 db = SQLAlchemy(app)
@@ -35,7 +32,7 @@ class User(db.Model):
     address = db.Column(db.String(50), nullable=True)
     info = db.Column(db.String(100), nullable=True)
     stage = db.Column(db.Integer, default='0')
-    real_avatar = db.Column(db.String(100))
+    real_avatar = db.Column(db.String(100), default='/static/avatar/code.png')
 
 
 class Post(db.Model):
@@ -46,7 +43,6 @@ class Post(db.Model):
     create_time = db.Column(db.DateTime, default=datetime.now)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     author = db.relationship('User', backref=db.backref('posts'))
-
 
 class Comment(db.Model):
     __tablename__ = 'comments'
@@ -178,27 +174,29 @@ def edit_info(user_id):
     if request.method == 'GET':
         return render_template('edit_info.html', form=form)
     else:
-        avatar = request.files['avatar']
-        fname = secure_filename(avatar.filename)
-        UPLOAD_FOLDER = os.path.join(basedir, '\\static\\avatar')
-        print(UPLOAD_FOLDER)
-        app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-        ALLOWED_EXTENSIONS = ['png', 'jpg', 'jpeg', 'gif']
-        # app.config['MAX_CONTENT_LENGTH'] = 1 * 1024 * 1024
-        flag = '.' in fname and fname.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
-        if not flag:
-            flash('文件类型错误!')
-            return redirect((url_for('edit_info', user_id=user.id)))
-        # filename = secure_filename(file.filename)
-        avatar.save(os.path.join(basedir, 'static\\avatar\\{}'.format(fname)))
-        user.real_avatar = '/static/avatar/{}'.format(fname)
-
         email = form.email.data
         address = form.address.data
         info = form.info.data
-        user.email = email
-        user.address = address
-        user.info = info
+
+        avatar = request.files['avatar']
+        if avatar:
+            fname = secure_filename(avatar.filename)
+            UPLOAD_FOLDER = os.path.join(basedir, '\\static\\avatar')
+            app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+            ALLOWED_EXTENSIONS = ['png', 'jpg', 'jpeg', 'gif']
+            # app.config['MAX_CONTENT_LENGTH'] = 1 * 1024 * 1024
+            flag = '.' in fname and fname.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+            if not flag:
+                flash('文件类型错误!')
+                return redirect((url_for('edit_info', user_id=user.id)))
+            avatar.save(os.path.join(basedir, 'static\\avatar\\{}'.format(fname)))
+            user.real_avatar = '/static/avatar/{}'.format(fname)
+        if email:
+            user.email = email
+        if address:
+            user.address = address
+        if info:
+            user.info = info
         db.session.add(user)
         db.session.commit()
         return redirect(url_for('user_detail', user_id=user.id))
@@ -251,13 +249,13 @@ def challenge(answer):
     chapter = Challenge.query.filter(Challenge.answer == answer).first()
     if chapter:
         photo = chapter.photo
-
+        chapter_id = chapter.id
         user_id = session.get('user_id')
         if user_id:
             user = User.query.filter(User.id == user_id).first()
             user.stage = answer
             db.session.commit()
-        return render_template('challenge.html', photo=photo)
+        return render_template('challenge.html', chapter_id=chapter_id, photo=photo)
     else:
         return "<h2>答案错误,请返回重新尝试!</h2>"
 
@@ -265,11 +263,10 @@ def challenge(answer):
 if __name__ == '__main__':
     # db.drop_all()
     # db.create_all()
-    # c1 = Challenge(answer='0', photo='rap.jpg')
-    # c2 = Challenge(answer='rap', photo='zhazha.jpg')
-    # c3 = Challenge(answer='zhazha', photo='jack.jpg')
-    # c4 = Challenge(answer='jack', photo='zhenxiang.jpg')
-    # c5 = Challenge(answer='zhenxiang', photo='sao.jpg')
-    # db.session.add_all([c1, c2, c3, c4, c5])
+    # c1 = Challenge(answer='0', photo='challenge.png')
+    # c2 = Challenge(answer='challenge', photo='abcde.png')
+    # c3 = Challenge(answer='21978', photo='digitnum.png')
+    # c4 = Challenge(answer='381654729', photo='joseph.png')
+    # db.session.add_all([c1, c2, c3, c4])
     # db.session.commit()
     app.run(debug=True)
