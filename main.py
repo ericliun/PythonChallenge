@@ -19,7 +19,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + \
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
-app.secret_key = 'codepku'
+app.secret_key = os.urandom(24)
 db = SQLAlchemy(app)
 
 
